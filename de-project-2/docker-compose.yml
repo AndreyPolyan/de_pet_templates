@@ -1,0 +1,217 @@
+services:
+  redis:
+    build:
+      context: ./data/redis_init
+    container_name: redis_service
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - backend_network
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    restart: unless-stopped
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - backend_network
+  
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "29092:29092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - backend_network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka:9092"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Starting Kafka...";
+        /etc/confluent/docker/run & sleep 10;
+        echo "Creating Kafka topics...";
+        kafka-topics --create --topic stg_service --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1;
+        kafka-topics --create --topic dds_service --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1;
+        kafka-topics --create --topic cdm_service --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1;
+        echo "Kafka startup complete!";
+        tail -f /dev/null
+    
+
+  akhq:
+    image: tchiotludo/akhq
+    container_name: akhq
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./data/akhq_init/config/application.yml:/app/application.yml
+    networks:
+      - backend_network
+    depends_on:
+      - kafka
+
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: jovyan
+      POSTGRES_PASSWORD: jovyan
+      POSTGRES_DB: jovyan
+    ports:
+      - "6432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./data/postgres_init/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - backend_network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "jovyan"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+  
+  datagenerator:
+    build:
+      context: ./services/1_source_data_service
+      dockerfile: Dockerfile
+    container_name: source_data_service
+    environment:
+      KAFKA_HOST: ${KAFKA_HOST}
+      KAFKA_PORT: ${KAFKA_PORT}
+      KAFKA_DESTINATION_TOPIC: ${KAFKA_STG_TOPIC}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+    networks:
+      - backend_network
+    ports:
+      - "5011:5001"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  stg_service:
+    build:
+      context: ./services/2_stg_service
+      dockerfile: Dockerfile
+    container_name: stg_service
+    environment:
+      KAFKA_HOST: ${KAFKA_HOST}
+      KAFKA_PORT: ${KAFKA_PORT}
+      KAFKA_SOURCE_TOPIC: ${KAFKA_STG_TOPIC}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+      KAFKA_DESTINATION_TOPIC: ${KAFKA_DDS_TOPIC}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD}
+
+    networks:
+      - backend_network
+    ports:
+      - "5012:5002"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  dds_service:
+    build:
+      context: ./services/3_dds_service
+      dockerfile: Dockerfile
+    container_name: dds_service
+    environment:
+      KAFKA_HOST: ${KAFKA_HOST}
+      KAFKA_PORT: ${KAFKA_PORT}
+      KAFKA_SOURCE_TOPIC: ${KAFKA_DDS_TOPIC}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+      KAFKA_DESTINATION_TOPIC: ${KAFKA_CDM_TOPIC}
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD}
+
+    networks:
+      - backend_network
+    ports:
+      - "5013:5003"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+  cdm_service:
+    build:
+      context: ./services/4_cdm_service
+      dockerfile: Dockerfile
+    container_name: cdm_service
+    environment:
+      KAFKA_HOST: ${KAFKA_HOST}
+      KAFKA_PORT: ${KAFKA_PORT}
+      KAFKA_SOURCE_TOPIC: ${KAFKA_CDM_TOPIC}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP}
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD}
+
+    networks:
+      - backend_network
+    ports:
+      - "5014:5004"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+networks:
+  backend_network:
+
+volumes:
+  redis_data:
+  kafka_data:
+  postgres_data:
+  zookeeper_data:

@@ -1,0 +1,8 @@
+numpy
+pymongo
+faker
+pandas
+pyyaml
+pydantic
+psycopg
+requests==2.31.0
