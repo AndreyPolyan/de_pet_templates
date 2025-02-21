@@ -3,7 +3,7 @@
 ## Spark Streaming + DWH + Message Broker
 
 #### Note 1: project is part of Yandex.Practicum Data Engineer Education
-#### Note 2: non-reprodusible , code only.
+#### Note 2: non-reproducible, code only.
 
 ### Stack: Spark Streaming, Kafka
 

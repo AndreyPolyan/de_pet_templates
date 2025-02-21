@@ -3,7 +3,7 @@
 ## HDFS + Spark Batch proccesing with Airflow orchestration
 
 #### Note 1: project is part of Yandex.Practicum Data Engineer Education
-#### Note 2: non-reprodusible , code only.
+#### Note 2: non-reproducible, code only.
 
 ### Stack: HDFS, Spark, Airflow
 

@@ -26,7 +26,7 @@ class DwhEntitiesDag:
             def loader_task():
                 pg_saver = PgSaver(table_name = dwh_table_name)
                 collection_reader = MgCollectionReader(mg_conn)
-                loader = MgCollectionLoader(collection_loader=collection_reader,
+                loader = MgCollectionLoader(collection_reader=collection_reader,
                                             pg_dest=dwh_connect,
                                             pg_saver=pg_saver,
                                             logger=log,
