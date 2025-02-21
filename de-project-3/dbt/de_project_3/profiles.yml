@@ -1,0 +1,19 @@
+de_project_3:
+  target: dev
+  outputs:
+    dev:
+      type: vertica
+      host: localhost  # Or Vertica service name from docker-compose
+      username: "de"
+      password: "engineer"
+      port: 25433
+      database: dwh
+      schema: public
+    prod:
+      type: vertica
+      host: host.docker.internal  # Or Vertica service name from docker-compose
+      username: "de"
+      password: "engineer"
+      port: 25433
+      database: dwh
+      schema: CDM

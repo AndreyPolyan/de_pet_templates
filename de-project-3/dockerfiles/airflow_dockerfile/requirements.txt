@@ -1,0 +1,14 @@
+numpy
+pymongo
+faker
+pandas
+pyyaml
+pydantic
+psycopg
+dbt-core
+dbt-vertica
+vertica-python
+apache-airflow-providers-vertica==3.2.1
+requests==2.31.0
+boto3
+protobuf==4.25.3

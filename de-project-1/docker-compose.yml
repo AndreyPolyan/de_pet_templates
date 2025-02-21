@@ -290,7 +290,6 @@ services:
        ADMIN_PASSWORD: admin
     volumes:
       - ./dockerfiles/superset/superset_data:/app/superset_home  
-      - ./dockerfiles/superset/dashboards:/dashboards 
     ports:
       - "28088:8088"
     depends_on:

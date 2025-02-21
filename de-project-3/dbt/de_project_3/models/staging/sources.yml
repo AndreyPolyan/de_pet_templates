@@ -1,0 +1,10 @@
+version: 2
+sources:
+  - name: STG
+    database: dwh
+    description: "Staging tables from S3 ingestion"
+    tables:
+      - name: transactions
+        description: "Transaction events"
+      - name: currencies
+        description: "Currency exchange rates"

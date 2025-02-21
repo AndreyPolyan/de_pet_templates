@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_transactions
+    description: Temporary table with filtering raw transactions. Parametrized by var launch_date.

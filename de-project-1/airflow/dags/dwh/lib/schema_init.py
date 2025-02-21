@@ -34,7 +34,7 @@ class SchemaDdl:
         self.log.info(f"Found {len(file_paths)} files to check changes.")
         self.log.info("Starting the migration process...")
 
-        cached_dir = os.path.join(path_to_scripts, "cached")
+        cached_dir = os.path.join("/data/sql/cached",path_to_scripts.split('/')[-1])
         if not os.path.exists(cached_dir):
             os.makedirs(cached_dir)
 
