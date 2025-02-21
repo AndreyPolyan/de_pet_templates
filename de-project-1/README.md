@@ -6,6 +6,13 @@ This project implements a classical Inmon-style Data Warehouse with three layers
 
 Additionally, MongoDB is used as a NoSQL data source, demonstrating the integration of structured and semi-structured data.
 
+Data sources:
+
+- Order System (Mongo) - user/restaurant/order collections
+- Bonus System (Postgres) - bonus events 
+
+Idea: calculate report with restaurants' rewards on daily basis. 
+
 ## Stack:
 
 - PostgreSQL – Data Warehouse for structured data storage + seperate instance as data source
@@ -36,6 +43,19 @@ Data Flow:
 - BI Layer: Apache Superset visualizes business KPIs and reports.
 
 ![Structure](./img/project.png)
+
+## Default connections 
+| **Resource**  | **Location**  | **Credentials**  |
+|-------------|----------------|------------------|
+| **Airflow UI** | localhost:6002 |User / Password: airflow / airflow|
+| **Superset** | localhost:28088 |User / Password: admin / admin|
+| **Airflow Metadata DB (Postgres)** | localhost:15432 |User / Password / DB : airflow / airflow / airflow|
+| **Bonus System DB (Postgres)** | localhost:25432 |User / Password / DB : airflow / airflow / airflow|
+| **Order System DB (Mongo)** | localhost:27017 |User / Password / DB : mongo_admin / mongo_password / mongo_orders|
+| **DWH DB (Postgres)** | localhost:35432 |User / Password / DB : de / engineer / dwh|
+
+
+
 
 ## Setup & Launch
 
