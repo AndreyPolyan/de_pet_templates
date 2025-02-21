@@ -1,0 +1,25 @@
+id;city;lat;lng;timezone
+1;Sydney;-33.865;151.2094;Australia/Sydney
+2;Melbourne;-37.8136;144.9631;Australia/Melbourne
+3;Brisbane;-27.4678;153.0281;Australia/Brisbane
+4;Perth;-31.9522;115.8589;Australia/Perth
+5;Adelaide;-34.9289;138.6011;Australia/Adelaide
+6;Gold Coast;-28.0167;153.4;Australia/Brisbane
+7;Cranbourne;-38.0996;145.2834;Australia/Melbourne
+8;Canberra;-35.2931;149.1269;Australia/Sydney
+9;Newcastle;-32.9167;151.75;Australia/Sydney
+10;Wollongong;-34.4331;150.8831;Australia/Sydney
+11;Geelong;-38.15;144.35;Australia/Melbourne
+12;Hobart;-42.8806;147.325;Australia/Hobart
+13;Townsville;-19.2564;146.8183;Australia/Brisbane
+14;Ipswich;-27.6167;152.7667;Australia/Brisbane
+15;Cairns;-16.9303;145.7703;Australia/Brisbane
+16;Toowoomba;-27.5667;151.95;Australia/Brisbane
+17;Darwin;-12.4381;130.8411;Australia/Darwin
+18;Ballarat;-37.55;143.85;Australia/Melbourne
+19;Bendigo;-36.75;144.2667;Australia/Melbourne
+20;Launceston;-41.4419;147.145;Australia/Hobart
+21;Mackay;-21.1411;149.1861;Australia/Brisbane
+22;Rockhampton;-23.375;150.5117;Australia/Brisbane
+23;Maitland;-32.7167;151.55;Australia/Sydney
+24;Bunbury;-33.3333;115.6333;Australia/Perth

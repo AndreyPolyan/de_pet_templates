@@ -126,3 +126,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+de-project-4/src/.DS_Store
+de-project-5/src/.DS_Store
+.gitignore
