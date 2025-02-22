@@ -126,6 +126,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+
 de-project-4/src/.DS_Store
 de-project-5/src/.DS_Store
 .gitignore
+./de-project-3/airflow/logs
+./de-project-2/airflow/logs
+./de-project-1/airflow/logs
+
