@@ -294,7 +294,7 @@ curl -X POST http://localhost:5011/push \
 
 Each service processes 200 messages per 30 seconds (can be adjusted inside service's code files)
 
-![kafka_ui_process](./img/kafka_ui.png)
+![kafka_ui_process](./img/kafka_ui_process.png)
 
 
 #### Step 9. Check the data is in DWH
