@@ -31,9 +31,9 @@ Data Flow:
 
 - STG Service: reads data from Kafka, enlarge data from Redis (user/restaurant info), pushes updated messages inro into in Kafka and ito STG layer in DWH
 
-- STG Service: reads data from Kafka, transform it into DDS Data Vault, pushes updated messages into cdm_topic in Kafka and ito DDS layer in DWH
+- DDS Service: reads data from Kafka, transform it into DDS Data Vault, pushes updated messages into cdm_topic in Kafka and ito DDS layer in DWH
 
-- CDM: reads daat from Kafka, updates CDM layer (counter datamarts)
+- CDM Service: reads daat from Kafka, updates CDM layer (counter datamarts)
 
 
 ![Structure](./img/project.png)
