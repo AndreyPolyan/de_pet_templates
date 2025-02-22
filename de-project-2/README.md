@@ -253,7 +253,8 @@ Connect DWH (Postgres) using appropriate IDE
 user: de
 password: engineer
 host: localhost
-post: 6432
+db: dwh
+port: 6432
 ```
 
 Check all schemas and tables are available
