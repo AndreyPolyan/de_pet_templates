@@ -58,7 +58,7 @@ monitor_thread.start()
 @app.get("/health")
 def health():
     """Health check endpoint that verifies both API and worker process."""
-    return jsonify({
+    return jsonify({"service":"stg_service",
         "api": "ok",
         "worker": "ok" if worker_healthy else "not running"
     })

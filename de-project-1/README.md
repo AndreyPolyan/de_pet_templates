@@ -56,7 +56,6 @@ Data Flow:
 
 
 
-
 ## Setup & Launch
 
 ### Prerequisites
@@ -140,14 +139,22 @@ Select **Reward Stat** dashboard
 
 #### Step 7. Feel free to adjust for your needs
 
+#### Step 8 (optional). To close the project
+
+```bash
+cd <path_to_git_repos>/de_pet_projects/de-project-1
 
 
+-- If we want to keep the data persistent for further restart
+docker compose down
 
-
+-- If we want to fully close the project and remove all data
+docker compose down -v
+```
 
 
 
 ---
-###License
+### License
 
 This project is licensed under the MIT License – you are free to modify and distribute it as needed.

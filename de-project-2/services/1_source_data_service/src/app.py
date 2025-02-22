@@ -18,7 +18,7 @@ message_generator = StgMessageGenerator(config.kafka_producer(), config.redis_cl
 @app.route("/health", methods=["GET"])
 def health_check():
     """API Health Check."""
-    return jsonify({"status": "ok"})
+    return jsonify({"service":"data_generator", "status": "ok"})
 
 @app.route("/push", methods=["POST"])
 def push_messages():
