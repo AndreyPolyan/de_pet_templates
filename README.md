@@ -1,8 +1,10 @@
-# **Data Engineering Pet Projects**
+# **Data Engineering Templates**
 
 This repository contains a collection of Data Engineering projects that demonstrate expertise in modern data architectures, ETL/ELT workflows, streaming data processing, and analytical data warehouses. Each project showcases a different aspect of Data Engineering, utilizing a variety of industry-standard tools and frameworks.
 
-## **Project Overview**
+It is built as part of past experience, includes basics of the solution (thus can be treated as templates).
+
+## **Overview**
 
 | **Project**  | **Tech Stack**  | **Description**  |
 |-------------|----------------|------------------|
@@ -19,5 +21,3 @@ Each project is self-contained, including:
 - **Source Code**: Scripts for data processing, ingestion, and transformations.
 - **Infrastructure as Code (if applicable)**: Docker and configuration files for setting up the environment.
 - **Documentation (if applicable)**: Step-by-step instructions to deploy and run the projects.
-
-These projects serve as practical examples of data engineering workflows, covering batch and real-time processing, data modeling, and ETL orchestration.
